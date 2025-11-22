@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: django-blog
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn my_site.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: False
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.12.0
+    autoDeploy: true
+
+databases:
+  - name: django-blog-db
+    databaseName: django_blog
+    user: django_blog_user
