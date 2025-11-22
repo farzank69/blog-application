@@ -45,3 +45,7 @@ staticfiles/
 # Zip files
 code.zip
 *.zip
+
+# Large image files
+blog/static/blog/images/*.jpg
+blog/static/blog/images/*.png
