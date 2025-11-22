@@ -31,7 +31,13 @@ SECRET_KEY = getenv("SECRET_KEY", "django-insecure-fallback-key-change-me")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv("DEBUG", "False") == "True"
 
+# ALLOWED_HOSTS configuration
 ALLOWED_HOSTS = getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+
+# Automatically add Render domain if RENDER environment variable is present
+if getenv("RENDER"):
+    ALLOWED_HOSTS.append(getenv("RENDER_EXTERNAL_HOSTNAME", ""))
+    ALLOWED_HOSTS.append(".onrender.com")
 
 
 # Application definition
@@ -164,7 +170,8 @@ MEDIA_URL = "/files/"      # this is just make sure how the url will look like w
 
 # Security Settings for Production
 if not DEBUG:
-    SECURE_SSL_REDIRECT = True
+    # Temporarily commented out SSL redirect for debugging
+    # SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
