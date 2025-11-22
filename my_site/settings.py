@@ -32,12 +32,13 @@ SECRET_KEY = getenv("SECRET_KEY", "django-insecure-fallback-key-change-me")
 DEBUG = getenv("DEBUG", "False") == "True"
 
 # ALLOWED_HOSTS configuration
-ALLOWED_HOSTS = getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+allowed_hosts_str = getenv("ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_str.split(",") if host.strip()]
 
 # Automatically add Render domain if RENDER environment variable is present
-if getenv("RENDER"):
-    ALLOWED_HOSTS.append(getenv("RENDER_EXTERNAL_HOSTNAME", ""))
-    ALLOWED_HOSTS.append(".onrender.com")
+render_external_hostname = getenv("RENDER_EXTERNAL_HOSTNAME")
+if render_external_hostname:
+    ALLOWED_HOSTS.append(render_external_hostname)
 
 
 # Application definition
