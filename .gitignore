@@ -41,3 +41,7 @@ staticfiles/
 
 # Database
 *.sqlite3
+
+# Zip files
+code.zip
+*.zip
