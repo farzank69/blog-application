@@ -5,17 +5,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        dark: '#1F2937',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'app.css' %}">
     {% block css_files %}{% endblock %}
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
-<body>
-    <header id="main-navigation">
-        <h1><a href="{% url "starting-page" %}">Farzan's Code Journal</a></h1>
-        <nav>
-            <a href="{% url "read-later" %}">Stored Posts</a>
-            <a href="{% url "posts-page" %}">All Posts</a>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Modern Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl md:text-3xl font-bold">
+                    <a href="{% url "starting-page" %}" class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hover:from-blue-700 hover:to-purple-700 transition-all">
+                        Farzan's Code Journal
+                    </a>
+                </h1>
+                <div class="flex gap-4 md:gap-6">
+                    <a href="{% url "read-later" %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 text-sm md:text-base">
+                        📚 Saved
+                    </a>
+                    <a href="{% url "posts-page" %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 text-sm md:text-base">
+                        All Posts
+                    </a>
+                </div>
+            </div>
         </nav>
     </header>
-    {% block content %}{% endblock  %}
+    
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p class="text-gray-400">© 2025 Farzan's Code Journal. Built with Django & Tailwind CSS.</p>
+        </div>
+    </footer>
 </body>
 </html>

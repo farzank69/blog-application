@@ -7,71 +7,155 @@
 {% endblock %}
 
 {% block content %}
-
-{% if comment_form.errors %}
-<div id="alert">
-    <h2>Saving the comment failed!</h2>
-    <p>Please check the comment form below and fix it!</p>
-    <a href="#comment-form">Fix!</a>
-</div>
-{% endif %}
-
-    <section id="summary">
-        <h2>{{ post.title }}</h2>
-        <div>
-           {% for tag in post_tags %}
-                <span class="tag">{{ tag.caption }}</span>
-           {% endfor %}
-        </div>
-
-        <div id="read-later">
-            <form action="{% url "read-later" %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" value="{{ post.id }}" name="post_id">
-                <button>
-                    {% if save_for_later %}
-                        Remove
-                    {% else %}
-                        Read Later
-                    {% endif %}
-                </button>
-            </form>
-        </div>
-        
-        <article>
-            <img src="{{ post.image.url }}" alt="{{ post.title }}">
-            <address>By <a href="mailto:{{ post.author.email }}" >{{ post.author}}</a></address>
-            <div>
-                Last Updated on <time> {{ post.date|date:"d M Y" }}</time>
+<div class="max-w-4xl mx-auto">
+    
+    <!-- Error Alert -->
+    {% if comment_form.errors %}
+    <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-8 rounded-r-lg">
+        <div class="flex items-start">
+            <div class="flex-shrink-0">
+                <span class="text-2xl">⚠️</span>
             </div>
-        </article>
-    </section>
-    <main>
-        {{ post.content|linebreaks }}
-    </main>
+            <div class="ml-3">
+                <h3 class="text-lg font-medium text-red-800">Saving the comment failed!</h3>
+                <p class="text-red-700 mt-1">Please check the comment form below and fix it!</p>
+                <a href="#comment-form" class="text-red-800 font-medium underline hover:text-red-900 mt-2 inline-block">Fix Issues →</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
-    <section id="comments">
-        <ul>
+    <!-- Post Header -->
+    <article class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <!-- Featured Image -->
+        {% if post.image %}
+        <div class="h-64 md:h-96 overflow-hidden">
+            <img src="{{ post.image.url }}" 
+                 alt="{{ post.title }}"
+                 class="w-full h-full object-cover">
+        </div>
+        {% endif %}
+        
+        <!-- Post Info -->
+        <div class="p-6 md:p-10">
+            <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">{{ post.title }}</h1>
+            
+            <!-- Tags & Read Later -->
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-6 border-b">
+                <div class="flex flex-wrap gap-2">
+                    {% for tag in post_tags %}
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                            #{{ tag.caption }}
+                        </span>
+                    {% endfor %}
+                </div>
+                
+                <form action="{% url "read-later" %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ post.id }}" name="post_id">
+                    <button class="{% if save_for_later %}bg-red-600 hover:bg-red-700{% else %}bg-blue-600 hover:bg-blue-700{% endif %} text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
+                        {% if save_for_later %}
+                            <span>🗑️</span> Remove
+                        {% else %}
+                            <span>📚</span> Read Later
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Author & Date -->
+            <div class="flex flex-col md:flex-row md:items-center gap-4 text-gray-600 mb-8">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">👤</span>
+                    <address class="not-italic">
+                        By <a href="mailto:{{ post.author.email }}" class="text-blue-600 hover:text-blue-700 font-medium">{{ post.author }}</a>
+                    </address>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xl"></span>
+                    <time class="font-medium">{{ post.date|date:"d M Y" }}</time>
+                </div>
+            </div>
+            
+            <!-- Post Content -->
+            <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
+                {{ post.content|linebreaks }}
+            </div>
+        </div>
+    </article>
+
+    <!-- Comments Section -->
+    <section class="bg-white rounded-2xl shadow-xl p-6 md:p-10 mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
+            Comments ({{ comments|length }})
+        </h2>
+        
+        {% if comments %}
+        <div class="space-y-6">
             {% for comment in comments %}
-                <li>
-                    <h2>{{ comment.user_name }}</h2>
-                    <p>{{ comment.text|linebreaks  }}</p>
-                </li>
+            <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-blue-500">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                        {{ comment.user_name|first|upper }}
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-800 mb-1">{{ comment.user_name }}</h3>
+                        <p class="text-gray-700 whitespace-pre-line">{{ comment.text }}</p>
+                    </div>
+                </div>
+            </div>
             {% endfor %}
-        </ul>
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-center py-8">No comments yet. Be the first to share your thoughts!</p>
+        {% endif %}
     </section>
-    <section>
+
+    <!-- Comment Form -->
+    <section class="bg-white rounded-2xl shadow-xl p-6 md:p-10">
         <form action="{% url "post_detail" post.slug %}" method="POST" id="comment-form">
             {% csrf_token %}
-            <h2>Your Comment</h2>
-            {% for form_field in comment_form  %}
-            <div class="form-control {% if form_field.errors %}invalid {% endif %}">
-                {{ form_field.label_tag }}
-                {{ form_field }}
-                {{ form_field.errors }}
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Your Comment</h2>
+            
+            <div class="space-y-6">
+                {% for form_field in comment_form %}
+                <div class="{% if form_field.errors %}border-red-300{% endif %}">
+                    <label class="block text-gray-700 font-semibold mb-2">
+                        {{ form_field.label }}
+                    </label>
+                    {% if form_field.name == 'text' %}
+                        <textarea name="{{ form_field.name }}" 
+                                  class="w-full px-4 py-3 border {% if form_field.errors %}border-red-500{% else %}border-gray-300{% endif %} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                  rows="5"
+                                  placeholder="Share your thoughts...">{{ form_field.value|default:"" }}</textarea>
+                    {% else %}
+                        <input type="{{ form_field.field.widget.input_type }}" 
+                               name="{{ form_field.name }}"
+                               value="{{ form_field.value|default:"" }}"
+                               class="w-full px-4 py-3 border {% if form_field.errors %}border-red-500{% else %}border-gray-300{% endif %} rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                               placeholder="{{ form_field.label }}">
+                    {% endif %}
+                    {% if form_field.errors %}
+                        <p class="mt-2 text-red-600 text-sm">{{ form_field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
-            <button>Save Comment</button>
+            
+            <button type="submit" 
+                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200 w-full md:w-auto">
+                Save Comment
+            </button>
         </form>
     </section>
+</div>
+
+<style>
+    .prose {
+        max-width: 100%;
+    }
+    .prose p {
+        margin-bottom: 1.5rem;
+    }
+</style>
 {% endblock %}

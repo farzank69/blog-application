@@ -9,13 +9,59 @@
 {% endblock %}
 
 {% block content %}
-<section id="all-posts">
-    <h1>My Collected Posts</h1>
-    <ul>
-        {% for post in all_posts %}
-            {% include "blog/includes/post.html" %}
-        {% endfor %}
-    </ul>
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-12 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">My Collected Posts</h1>
+            <p class="text-gray-600 text-lg">Explore all my writings on tech, coding, and more</p>
+        </div>
 
-</section>
+        <!-- Posts Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for post in all_posts %}
+                <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <a href="{% url "post_detail" post.slug %}" class="block">
+                        {% if post.image %}
+                            <div class="h-48 overflow-hidden bg-gray-200">
+                                <img src="{{ post.image.url }}" 
+                                     alt="{{ post.title }}"
+                                     class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                            </div>
+                        {% else %}
+                            <div class="h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                                <span class="text-white text-6xl"></span>
+                            </div>
+                        {% endif %}
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2">{{ post.title }}</h3>
+                            <p class="text-sm text-gray-500 mb-3">{{ post.date|date:"M d, Y" }}</p>
+                            <p class="text-gray-600 line-clamp-3">{{ post.excerpt }}</p>
+                            <div class="mt-4">
+                                <span class="text-blue-600 font-medium hover:text-blue-700">Read more →</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            {% empty %}
+                <div class="col-span-full text-center py-16">
+                    <p class="text-gray-500 text-xl">No posts yet. Check back soon!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 {% endblock %}

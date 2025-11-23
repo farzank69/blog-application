@@ -10,31 +10,100 @@
 
 {% block content %}
     
-    <section id="welcome">
-        <header>
-            <img src="{% static "blog/images/headshot.png" %}" alt="Farzan - The Author of this Blog">
-            <h2>FARZAN'S BLOG</h2>
-        </header>
-        <p>Hey, I am Farzan and I love programming and gaming! </p>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-8 md:p-16 text-white mb-12">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="flex-shrink-0">
+                <img src="{% static "blog/images/headshot.png" %}" 
+                     alt="Farzan - The Author of this Blog"
+                     class="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-white shadow-xl object-cover">
+            </div>
+            <div class="text-center md:text-left">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">FARZAN'S BLOG</h2>
+                <p class="text-xl md:text-2xl text-blue-100 mb-2">Hey, I am Farzan and I love programming and gaming! 🚀</p>
+                <p class="text-lg text-blue-50">Sharing knowledge, one post at a time.</p>
+            </div>
+        </div>
     </section>
 
-    <section id="latest-posts">
-        <h2>My Latest Thoughts</h2>
+    <!-- Latest Posts Section -->
+    <section class="mb-16">
+        <div class="flex items-center justify-between mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800">
+                ✨ My Latest Thoughts
+            </h2>
+        </div>
 
-        <ul>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for post in posts %}
-                {% include "blog/includes/post.html" %}
+                <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <a href="{% url "post_detail" post.slug %}" class="block">
+                        {% if post.image %}
+                            <div class="h-48 overflow-hidden">
+                                <img src="{{ post.image.url }}" 
+                                     alt="{{ post.title }}"
+                                     class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
+                            </div>
+                        {% endif %}
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2">{{ post.title }}</h3>
+                            <p class="text-sm text-gray-500 mb-3">{{ post.date|date:"M d, Y" }}</p>
+                            <p class="text-gray-600 line-clamp-3">{{ post.excerpt }}</p>
+                            <div class="mt-4">
+                                <span class="text-blue-600 font-medium hover:text-blue-700">Read more →</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
             {% endfor %}
-        </ul>
+        </div>
     </section>
-    <section id="about">
-        <h2>What I Do</h2>
-        <p>
-            I love programming and sharing my knowledge with the world. I write about web development, data science, and other tech topics.
-        </p>
-        <p>
-            When I'm not coding, I enjoy playing video games, photography, and exploring new places.
-        </p>
 
+    <!-- About Section -->
+    <section class="bg-white rounded-2xl shadow-lg p-8 md:p-12">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">What I Do</h2>
+        <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+            <p>
+                I love programming and sharing my knowledge with the world. I write about web development, data science, and other tech topics.
+            </p>
+            <p>
+                When I'm not coding, I enjoy playing video games, photography, and exploring new places.
+            </p>
+        </div>
+        
+        <!-- Skills/Interests Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+            <div class="bg-blue-50 rounded-lg p-4 text-center">
+                <span class="text-3xl mb-2 block"></span>
+                <p class="text-sm font-medium text-gray-700">Web Dev</p>
+            </div>
+            <div class="bg-purple-50 rounded-lg p-4 text-center">
+                <span class="text-3xl mb-2 block"></span>
+                <p class="text-sm font-medium text-gray-700">Data Science</p>
+            </div>
+            <div class="bg-green-50 rounded-lg p-4 text-center">
+                <span class="text-3xl mb-2 block"></span>
+                <p class="text-sm font-medium text-gray-700">Gaming</p>
+            </div>
+            <div class="bg-pink-50 rounded-lg p-4 text-center">
+                <span class="text-3xl mb-2 block"></span>
+                <p class="text-sm font-medium text-gray-700">Photography</p>
+            </div>
+        </div>
     </section>
+    
+    <style>
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 {% endblock %}
