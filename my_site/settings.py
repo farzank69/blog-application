@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     'blog',
 ]
 
@@ -149,11 +151,18 @@ STATICFILES_DIRS = [
 # Whitenoise configuration for serving static files
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
+}
+
+# Cloudinary Configuration
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': getenv('CLOUDINARY_API_SECRET'),
 }
 
 # Default primary key field type
