@@ -229,16 +229,11 @@ chmod +x build.sh
 4. Push to branch
 5. Open pull request
 
-## License
-
-This project is for educational purposes.
 
 ## Support
-
-For deployment issues, see [DEPLOYMENT.md](DEPLOYMENT.md)
 
 For general Django help, visit [Django Documentation](https://docs.djangoproject.com/)
 
 ---
 
-**Built with Django 🎯**
+**Built with Django**
