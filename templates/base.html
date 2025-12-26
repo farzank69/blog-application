@@ -6,42 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
     
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#3B82F6',
-                        secondary: '#10B981',
-                        dark: '#1F2937',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'tailwind.css' %}">
     <link rel="stylesheet" href="{% static 'app.css' %}">
     {% block css_files %}{% endblock %}
-    
-    <style>
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-    </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
     <!-- Modern Navigation -->
